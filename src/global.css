@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* primary */
+  --product: 219.41 83.61% 76.08%;
+  /* gray */
+  --gray-900: 240 15.56% 8.82%;
+  --gray-800: 240 16.98% 10.39%;
+  --gray-700: 240 16.42% 13.14%;
+  --gray-600: 240 16.05% 15.88%;
+  --gray-500: 240 17.48% 28.04%;
+  --gray-400: 240 10.82% 54.71%;
+  --gray-300: 240 17.48% 71.96%;
+  --gray-200: 240 19.63% 79.02%;
+  --gray-100: 0 0% 98.04%;
+  /* background */
+  --background: 240 13.64% 8.63%;
+}
+
+/* hide the scrollbar on Chrome */
+::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: white;
+  width: 100%;
+  height: 100vh;
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+}
