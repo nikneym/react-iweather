@@ -52,6 +52,7 @@ export default {
       },
       dropShadow: {
         light: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+        hard: "0px 4px 30px rgba(0, 0, 0, 0.40)",
       },
     },
     colors: {
