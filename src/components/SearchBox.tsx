@@ -14,7 +14,7 @@ interface SearchErrorProps {
   children?: ReactNode;
 }
 
-// component we use for errors inside combobox
+// component we use for errors inside popOver
 function SearchError({ children }: SearchErrorProps) {
   return <span className="px-5 py-4 text-gray-200">{children}</span>;
 }
@@ -101,7 +101,7 @@ export default function SearchBox() {
           <motion.div
             className="relative flex flex-col w-full z-50 mt-2 bg-[#1E1E29] rounded-lg gap-y-[1px] max-h-56 overflow-x-hidden overflow-y-auto top-0 hide-scrollbar drop-shadow-hard"
             /* make AnimatePresence track it's presence in the tree */
-            key="combobox"
+            key="popOver"
             /* make this div non-tabbable */
             tabIndex={-1}
             /* animations related */
