@@ -6,7 +6,7 @@ interface Props
 
 const TextInput = forwardRef<HTMLInputElement, Props>((props, ref) => (
   <input
-    className="relative px-5 py-[17px] w-full placeholder-gray-400 text-gray-100 bg-[#1E1E29] rounded-lg drop-shadow-light outline-none caret-product"
+    className="relative pl-5 pr-16 py-[17px] w-full placeholder-gray-400 text-gray-100 bg-[#1E1E29] rounded-lg drop-shadow-light outline-none caret-product"
     type="text"
     {...props}
     ref={ref}
