@@ -17,6 +17,39 @@
   --gray-100: 0 0% 98.04%;
   /* background */
   --background: 240 13.64% 8.63%;
+  /* drop shadow */
+  --drop-shadow-light: 0px 4px 4px rgba(0, 0, 0, .25);
+  --drop-shadow-hard: 0px 4px 30px rgba(0, 0, 0, .40);
+  --drop-shadow-night: 0px 0px 20px #212876;
+}
+
+@layer components {
+  .slider-controller {
+    @apply relative hidden lg:inline-block z-50 flex-shrink-0 w-6 h-6 box-content p-2 bg-gray-100 text-gray-800 rounded-lg focus:outline active:outline focus:outline-2 active:outline-2 outline-product outline-offset-2;
+  }
+
+  .vivid-box-skeleton {
+    @apply relative rounded-xl overflow-hidden w-full md:w-[335px] h-[304px] order-1 md:order-2 self-auto md:self-end z-50 bg-gray-500 animate-pulse;
+  }
+
+  .weather-info-skeleton {
+    @apply w-full flex flex-row items-center border-b last:border-none border-b-gray-700 py-4 px-0.5 gap-x-4 box-border;
+  }
+
+  .day-slider-skeleton {
+    @apply w-full h-40 animate-pulse bg-gray-500;
+  }
+}
+
+body {
+  position: relative;
+  background-color: hsl(var(--background));
+  color: white;
+  width: 100%;
+  height: 100vh;
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  overflow-x: hidden;
 }
 
 .hide-scrollbar {
@@ -29,11 +62,18 @@
   display: none;
 }
 
-body {
-  background-color: hsl(var(--background));
-  color: white;
+.bg-night {
+  background-image: url("/night.svg");
+  background-size: cover;
   width: 100%;
-  height: 100vh;
-  font-family: "Nunito", sans-serif;
-  font-optical-sizing: auto;
+  height: 100%;
+  border-radius: 0.5rem /* 8px */;
+}
+
+.bg-day {
+  background-image: url("/daytime.svg");
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.5rem /* 8px */;
 }

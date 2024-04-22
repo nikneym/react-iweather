@@ -51,8 +51,18 @@ export default {
         ],
       },
       dropShadow: {
-        light: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-        hard: "0px 4px 30px rgba(0, 0, 0, 0.40)",
+        light: "var(--drop-shadow-light)",
+        hard: "var(--drop-shadow-hard)",
+        night: "var(--drop-shadow-night)",
+      },
+      keyframes: {
+        "pulse-drop-shadow": {
+          from: { filter: "drop-shadow(0 0 1.2rem #FFEE94)" },
+          to: { filter: "drop-shadow(0 0 .6rem #FFEE94)" },
+        },
+      },
+      animation: {
+        "pulse-drop-shadow": "pulse-drop-shadow 2s alternate infinite",
       },
     },
     colors: {
@@ -67,6 +77,8 @@ export default {
         200: "hsl(var(--gray-200))",
         100: "hsl(var(--gray-100))",
       },
+      transparent: "transparent",
+      background: "hsl(var(--background))",
     },
     fontSize: {
       lg: [
