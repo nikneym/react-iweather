@@ -4,7 +4,7 @@ export default function useDebounce<T>(
   actionCallback: (e: T) => void,
   timeout: number
 ) {
-  const timer = useRef<Timer | number | null>(null);
+  const timer = useRef<number | null>(null);
 
   return useCallback(
     (e: T) => {
@@ -13,6 +13,7 @@ export default function useDebounce<T>(
         timer.current = null;
       }
 
+      // @ts-ignore
       timer.current = setTimeout(() => actionCallback(e), timeout);
     },
     [actionCallback, timeout]

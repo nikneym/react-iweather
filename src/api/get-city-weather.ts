@@ -70,9 +70,7 @@ export default async function getCityWeather(
 ): Promise<ResponseData> {
   const { data } = await axiosInstance({
     method: "GET",
-    url: `onecall?lat=${lat}&lon=${lon}&units=metric&appid=${
-      import.meta.env.VITE_OPENWEATHER_API_KEY
-    }`,
+    url: `onecall?lat=${lat}&lon=${lon}&units=metric&appid=439d4b804bc8187953eb36d2a8c26a02`,
   });
 
   return data;

@@ -51,9 +51,7 @@ export default async function searchLocation(
 ): Promise<ResponseData> {
   const { data } = await axiosInstance({
     method: "GET",
-    url: `find?q=${location}&appid=${
-      import.meta.env.VITE_OPENWEATHER_API_KEY
-    }&units=metric`,
+    url: `find?q=${location}&appid=439d4b804bc8187953eb36d2a8c26a02&units=metric`,
   });
 
   return data;
