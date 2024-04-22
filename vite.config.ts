@@ -11,4 +11,5 @@ export default defineConfig({
     },
   },
   plugins: [react()],
+  base: "react-iweather",
 });
