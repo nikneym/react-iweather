@@ -30,7 +30,7 @@ export interface Location {
   sys: {
     country: string;
   };
-  /* FIXME: these two likely return some other types too, but we don't need them anyway for this project */
+  /* FIXME: these two likely return some other types too, but we don't need them for this project anyway */
   rain: null;
   snow: null;
   clouds: {
@@ -51,7 +51,9 @@ export default async function searchLocation(
 ): Promise<ResponseData> {
   const { data } = await axiosInstance({
     method: "GET",
-    url: `find?q=${location}&appid=439d4b804bc8187953eb36d2a8c26a02&units=metric`,
+    url: `find?q=${location}&appid=${
+      import.meta.env.VITE_OPENWEATHER_API_KEY
+    }&units=metric`,
   });
 
   return data;

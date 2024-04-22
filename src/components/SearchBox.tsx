@@ -31,8 +31,7 @@ export default function SearchBox() {
       result = searchSchema.parse(e.target.value);
     } catch {
       // set search value to null to trigger re-render
-      setQuery(null);
-      return;
+      return setQuery(null);
     }
 
     setQuery(result);
@@ -47,8 +46,12 @@ export default function SearchBox() {
       onSubmit={(e) => {
         e.preventDefault();
         if (status === "success" && data.list.length !== 0) {
-          const location = data.list[0];
-          return navigate(`/city/${location.id}`);
+          const {
+            coord: { lat, lon },
+            id,
+          } = data.list[0];
+
+          return navigate(`/city/${query}/${id}/${lat}/${lon}`);
         }
       }}
     >
@@ -95,87 +98,94 @@ export default function SearchBox() {
           }
         }}
       />
-      {/* show the results with an animation */}
-      <AnimatePresence mode="wait">
-        {isQuery && (
-          <motion.div
-            className="relative flex flex-col w-full z-50 mt-2 bg-[#1E1E29] rounded-lg gap-y-[1px] max-h-56 overflow-x-hidden overflow-y-auto top-0 hide-scrollbar drop-shadow-hard"
-            /* make AnimatePresence track it's presence in the tree */
-            key="popOver"
-            /* make this div non-tabbable */
-            tabIndex={-1}
-            /* animations related */
-            initial={{ opacity: 0, top: "12px" }}
-            animate={{ opacity: 1, top: "0px" }}
-            exit={{ opacity: 0, top: "12px" }}
-          >
-            {/* we've likely hit a rate limit or backend is unreachable for some other reason */}
-            {status === "error" && (
-              <SearchError>
-                Encountered with an error while fetching data
-              </SearchError>
-            )}
-            {/* request was successful */}
-            {status === "success" &&
-              /* show an error if there are no results */
-              (data.list.length === 0 ? (
-                <SearchError>No results were found</SearchError>
-              ) : (
-                /* show the list items if there are results */
-                data.list.map((e, i) => (
-                  <Link
-                    className="px-5 py-4 bg-gray-500 hover:bg-gray-500/60 focus:bg-gray-500/60 outline-none transition-all text-left text-gray-100 w-full"
-                    to={`/city/${e.id}`}
-                    /* mark the first and the last links */
-                    id={
-                      i === 0
-                        ? "link-first"
-                        : i === data.list.length - 1
-                        ? "link-last"
-                        : undefined
-                    }
-                    /* these are needed since our input is a controlled component */
-                    onClick={() => setInputValue(`${e.name}, ${e.sys.country}`)}
-                    onFocus={() => setInputValue(`${e.name}, ${e.sys.country}`)}
-                    /* cycle tabbing */
-                    /* using onBlur here causes some errors with mouse interactions, it's better to stick to onKeyDown */
-                    onKeyDown={(e) => {
-                      if (e.key === "ArrowUp") {
-                        e.preventDefault();
-                        const el = e.currentTarget
-                          .previousElementSibling as HTMLLinkElement | null;
-                        if (!el) {
-                          document.getElementById("search-input")!.focus();
-                          return;
+      {/* wrap the popOver in a relative div in order to position it correctly */}
+      <div className="relative">
+        {/* show the results with an animation */}
+        <AnimatePresence mode="wait">
+          {isQuery && (
+            <motion.div
+              className="absolute flex flex-col w-full z-50 mt-2 bg-[#1E1E29] rounded-lg gap-y-[1px] max-h-56 overflow-x-hidden overflow-y-auto top-0 hide-scrollbar drop-shadow-hard"
+              /* make AnimatePresence track it's presence in the tree */
+              key="popOver"
+              /* make this div non-tabbable */
+              tabIndex={-1}
+              /* animations related */
+              initial={{ opacity: 0, top: "12px" }}
+              animate={{ opacity: 1, top: "0px" }}
+              exit={{ opacity: 0, top: "12px" }}
+            >
+              {/* we've likely hit a rate limit or backend is unreachable for some other reason */}
+              {status === "error" && (
+                <SearchError>
+                  Encountered with an error while fetching data
+                </SearchError>
+              )}
+              {/* request was successful */}
+              {status === "success" &&
+                /* show an error if there are no results */
+                (data.list.length === 0 ? (
+                  <SearchError>No results were found</SearchError>
+                ) : (
+                  /* show the list items if there are results */
+                  data.list.map(
+                    (
+                      { name, sys: { country }, coord: { lat, lon }, id },
+                      i
+                    ) => (
+                      <Link
+                        className="px-5 py-4 bg-gray-500 hover:bg-gray-500/60 focus:bg-gray-500/60 outline-none transition-all text-left text-gray-100 w-full"
+                        to={`/city/${query}/${id}/${lat}/${lon}`}
+                        /* mark the first and the last links */
+                        id={
+                          i === 0
+                            ? "link-first"
+                            : i === data.list.length - 1
+                            ? "link-last"
+                            : undefined
                         }
+                        onFocus={() => setInputValue(`${name}, ${country}`)}
+                        /* cycle tabbing */
+                        /* using onBlur here causes some errors with mouse interactions, it's better to stick to onKeyDown */
+                        onKeyDown={({ key, currentTarget, preventDefault }) => {
+                          if (key === "ArrowUp") {
+                            preventDefault();
+                            const el =
+                              currentTarget.previousElementSibling as HTMLLinkElement | null;
+                            if (!el) {
+                              document.getElementById("search-input")!.focus();
+                              return;
+                            }
 
-                        return el.focus();
-                      } else if (e.key === "ArrowDown") {
-                        e.preventDefault();
-                        const el = e.currentTarget
-                          .nextElementSibling as HTMLLinkElement | null;
-                        if (!el) {
-                          document.getElementById("search-input")!.focus();
-                          return;
-                        }
+                            return el.focus();
+                          } else if (key === "ArrowDown") {
+                            preventDefault();
+                            const el =
+                              currentTarget.nextElementSibling as HTMLLinkElement | null;
+                            if (!el) {
+                              document.getElementById("search-input")!.focus();
+                              return;
+                            }
 
-                        return el.focus();
-                      } else if (e.key === "Tab") {
-                        if (e.currentTarget.nextElementSibling !== null) return;
-                        // we've reached to last element, return to input element
-                        e.preventDefault();
-                        document.getElementById("search-input")!.focus();
-                      }
-                    }}
-                    key={i}
-                  >
-                    {e.name}, {e.sys.country}
-                  </Link>
-                ))
-              ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
+                            return el.focus();
+                          } else if (key === "Tab") {
+                            if (currentTarget.nextElementSibling !== null)
+                              return;
+                            // we've reached to last element, return to input element
+                            preventDefault();
+                            document.getElementById("search-input")!.focus();
+                          }
+                        }}
+                        key={i}
+                      >
+                        {name}, {country}
+                      </Link>
+                    )
+                  )
+                ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </form>
   );
 }
